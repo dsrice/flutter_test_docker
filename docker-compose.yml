@@ -1,0 +1,31 @@
+version: '3'
+services:
+  flutter_db:
+    image: postgres:latest
+    container_name: flutter_db
+    restart: always
+    environment:
+      POSTGRES_USER: flutter
+      POSTGRES_PASSWORD: flutter2812
+      PGPASSWORD: flutter2812
+      POSTGRES_DB: flutter
+      TZ: "Asia/Tokyo"
+    ports:
+      - "15432:5432"
+    volumes:
+      - ./postgres:/var/lib/postgresql
+      - ./postgres-init:/docker-entrypoint-initdb.d
+
+  flutter_demo_web:
+    build: ../flutter_app_web
+    container_name: flutter_demo_web
+    restart: always
+    ports:
+      - "8000:8000"
+#    command: sh -c "sleep 5; python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - "../flutter_app_web :/app/web/current"
+    depends_on:
+      - flutter_db
+    tty: true
+
