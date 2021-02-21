@@ -20,9 +20,10 @@ services:
     build: ../flutter_app_web
     container_name: flutter_demo_web
     restart: always
+    env_file: ./contents/web/docker.env
     ports:
       - "8000:8000"
-#    command: sh -c "sleep 5; python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "sleep 5; python manage.py runserver 0.0.0.0:8000"
     volumes:
       - "../flutter_app_web :/app/web/current"
     depends_on:
