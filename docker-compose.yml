@@ -13,7 +13,7 @@ services:
     ports:
       - "15432:5432"
     volumes:
-      - ./postgres:/var/lib/postgresql
+      - postgres:/var/lib/postgresql/data
       - ./postgres-init:/docker-entrypoint-initdb.d
 
   flutter_demo_web:
@@ -29,4 +29,5 @@ services:
     depends_on:
       - flutter_db
     tty: true
-
+volumes:
+    postgres:
