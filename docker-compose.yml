@@ -1,20 +1,22 @@
 version: '3'
 services:
   flutter_db:
-    image: postgres:latest
-    container_name: flutter_db
+    build: ./contents/mysql
+    container_name: base_mysql
     restart: always
     environment:
-      POSTGRES_USER: flutter
-      POSTGRES_PASSWORD: flutter2812
-      PGPASSWORD: flutter2812
-      POSTGRES_DB: flutter
-      TZ: "Asia/Tokyo"
-    ports:
-      - "15432:5432"
+      MYSQL_ROOT_PASSWORD: flutter2812
+      MYSQL_DATABASE: flutter
+      MYSQL_USER: flutter
+      MYSQL_PASSWORD: flutter2812
+      TZ: 'Asia/Tokyo'
+    command: --innodb-use-native-aio=0
     volumes:
-      - postgres:/var/lib/postgresql/data
-      - ./postgres-init:/docker-entrypoint-initdb.d
+      - ./cache/db/ :/var/lib/mysql
+      - ./contents/mysql/conf.d :/etc/mysql/conf.d/
+      - ./log/mysql :/var/log/mysql
+    ports:
+      - 33306:3306
 
   flutter_demo_web:
     build: ../flutter_app_web
@@ -29,5 +31,3 @@ services:
     depends_on:
       - flutter_db
     tty: true
-volumes:
-    postgres:
